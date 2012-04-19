@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>vticker test</title>
+<script src="jquery-1.7.1.min.js"></script>
+<script src="../jquery.vticker.js"></script>
+<script>
+$(function(){
+	var $scroller = $("#scroller");
+	$scroller.vTicker('init', {height: 20, showItems: 1});
+	
+	$(".next").click(function(event){ 
+			event.preventDefault();
+			var checked = $("#animation").is(':checked');
+			$scroller.vTicker('next', {animate:checked});
+		});
+	$(".prev,.next").hover(function(){ 
+			$scroller.vTicker('pause', true);
+		}, function(){
+			$scroller.vTicker('pause', false);
+	});
+	$(".prev").click(function(event){ 
+			event.preventDefault();
+			var checked = $("#animation").is(':checked');
+			$scroller.vTicker('prev', {animate:checked});
+		});
+});
+</script>
+</head>
+<body>
+<h1>VTicker Test</h1>
+<input id="animation" type="checkbox"></input>Use Animation
+<div id="scroller" style="border:1px solid silver">
+<ul id="list">
+<li>Test 1</li>
+<li>Test 2</li>
+<li>Test 3</li>
+</ul>
+</div>
+<a class="Prev" href="#">Prev</a>
+<a class="Next" href="#">Next</a>
+</body>
+</html>
