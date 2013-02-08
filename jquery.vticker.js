@@ -15,7 +15,9 @@
     showItems: 1,
     mousePause: true,
     height: 0,
-    animate: true
+    animate: true,
+    margin: 0,
+    padding: 0
   };
 
   var internal = { 
@@ -27,11 +29,14 @@
       var obj = el.children('ul');
       
       var clone = obj.children('li:first').clone(true);
-      
+
       if(options.height > 0)
       {
         height = obj.children('li:first').height();
       }
+
+      // adjust for margins & padding
+      height += (options.margin) + (options.padding*2);
 
       if(attribs && attribs.animate) {
         state.animating = true;
@@ -58,8 +63,11 @@
       
       if(options.height > 0)
       {
-        height = obj.children('li:first').height();
+        height = obj.children('li:first').height()
       }
+
+      // adjust for margins & padding
+      height += (options.margin) + (options.padding*2);
       
       obj.css('top', '-' + height + 'px')
         .prepend(clone);
@@ -94,6 +102,7 @@
       var el = $(this);
       var state = { 
         itemHeight: 0,
+        itemMargin: 0,
         element: el,
         animating: false,
         options: options,
@@ -103,7 +112,7 @@
 
       el.css({overflow: 'hidden', position: 'relative'})
         .children('ul').css({position: 'absolute', margin: 0, padding: 0})
-        .children('li').css({margin: 0, padding: 0});
+        .children('li').css({margin: options.margin, padding: options.padding});
 
       if(isNaN(options.height) || options.height == 0)
       {
@@ -120,7 +129,8 @@
         });
 
         // set element to total height
-        el.height(state.itemHeight * options.showItems);
+        var box = (options.margin) + (options.padding * 2);
+        el.height(((state.itemHeight + box) * options.showItems) + options.margin);
       }
       else
       {
@@ -147,6 +157,8 @@
     pause: function(pauseState) {
       var state = $(this).data('state');
       state.isPaused = pauseState;
+      if(pauseState) $(this).addClass('paused');
+      else $(this).removeClass('paused');
     },
 
     next: function(attribs) { 

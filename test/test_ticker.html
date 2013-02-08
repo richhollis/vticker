@@ -7,6 +7,9 @@
 $(function(){
 
 	function initTicker(id, options) { 
+		$ul = $('<div id="'+id.replace('#','')+'" style="border: 1px solid orange"><ul><li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt</li><li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li><li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li></ul></div>');
+		$("#scrollers").append($ul);
+
 		var $scroller = $(id);
 		$scroller.vTicker('init', options);
 		
@@ -27,9 +30,12 @@ $(function(){
 			});
 	}
 	
-	initTicker('#scroller1', {height: 20});
+	initTicker('#scroller1', {height: 200});
 	initTicker('#scroller2', {});
-	initTicker('#scroller3', {showItems:2});
+	initTicker('#scroller3', {showItems:2, margin: 5, padding: 5});
+	initTicker('#scroller4', {showItems:2, margin: 10});
+	initTicker('#scroller5', {showItems:2, padding: 10});
+	initTicker('#scroller6');
 	
 });
 </script>
@@ -38,32 +44,9 @@ $(function(){
 <h1>VTicker Test</h1>
 <input id="animation" type="checkbox"></input>Use Animation
 
-<!-- first scroller -->
-<div id="scroller1" style="border:1px solid silver">
-<ul id="list1">
-<li>Test 1</li>
-<li>Test 2</li>
-<li>Test 3</li>
-</ul>
+<div id="scrollers">
 </div>
 
-<!-- second scroller -->
-<div id="scroller2" style="border:1px solid red">
-<ul id="list2">
-<li>Test A</li>
-<li>Test B</li>
-<li>Test C</li>
-</ul>
-</div>
-
-<!-- third scroller -->
-<div id="scroller3" style="border:1px solid green">
-<ul id="list3">
-<li>Test AA</li>
-<li>Test BB</li>
-<li>Test CC</li>
-</ul>
-</div>
 
 <a class="Prev" href="#">Prev</a>
 <a class="Next" href="#">Next</a>
