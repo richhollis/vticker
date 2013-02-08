@@ -16,26 +16,34 @@ Please consider supporting the original author who has a Donate button on their 
 ### Options
 
     var defaults = {
-		speed: 700,
-		pause: 4000,
-		showItems: 3,
-		mousePause: true,
-		isPaused: false,
-		height: 0
-	};
-	
+      speed: 700,
+      pause: 4000,
+      showItems: 1,
+      mousePause: true,
+      height: 0,
+      animate: true,
+      margin: 0,
+      padding: 0
+    };
+  
 ### Starting ticker
-	
+  
     var $scroller = $("#scroller");
+    $scroller.vTicker('init'); // show one item, automatically calculate item height
+    $scroller.vTicker('init', {margin: 10}); // show one item with 10px margin
+    $scroller.vTicker('init', {padding: 4}); // show one item with 4px padding
+    $scroller.vTicker('init', {showItems: 3}); // fixed number of items, automatically 
+    calculate item height
     $scroller.vTicker('init', {height: 20}); // fixed element height
-    $scroller.vTicker('init', {showItems: 3}); // fixed number of items, automatically calculate item height
-    $scroller.vTicker('init', {}); // show one item, automatically calculate item height
-	
+    
+  
 ### Pausing
     
-	$scroller.vTicker('pause', true);
-	$scroller.vTicker('pause', false);	
-	
+    $scroller.vTicker('pause', true);
+    $scroller.vTicker('pause', false);  
+
+  When the ticker is paused the outer DIV container will toggle the 'paused' class, in case you wish to change the visual display for paused items.
+  
 ### Adding previous / next buttons:
 
 The options paramter of methods next & prev is optional. If omitted then animation is turned off (the default) As the animation slows down the speed at which the user can go through items this is why the default is off.
@@ -47,16 +55,16 @@ The options paramter of methods next & prev is optional. If omitted then animati
 
 
     $(".next").click(function(event){ 
-			event.preventDefault();
-			$scroller.vTicker('next', {animate:true});
-		});
-	$(".prev,.next").hover(function(){ 
-			$scroller.vTicker('pause', true);
-		}, function(){
-			$scroller.vTicker('pause', false);
-	});
-	$(".prev").click(function(event){ 
-			event.preventDefault();
-			$scroller.vTicker('prev', {animate:true});
-		});	
-	
+      event.preventDefault();
+      $scroller.vTicker('next', {animate:true});
+    });
+    $(".prev,.next").hover(function(){ 
+        $scroller.vTicker('pause', true);
+      }, function(){
+        $scroller.vTicker('pause', false);
+    });
+    $(".prev").click(function(event){ 
+        event.preventDefault();
+        $scroller.vTicker('prev', {animate:true});
+    }); 
+  
