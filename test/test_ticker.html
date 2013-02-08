@@ -5,37 +5,66 @@
 <script src="../jquery.vticker.js"></script>
 <script>
 $(function(){
-	var $scroller = $("#scroller");
-	$scroller.vTicker('init', {height: 20, showItems: 1});
+
+	function initTicker(id, options) { 
+		var $scroller = $(id);
+		$scroller.vTicker('init', options);
+		
+		$(".next").click(function(event){ 
+				event.preventDefault();
+				var checked = $("#animation").is(':checked');
+				$scroller.vTicker('next', {animate:checked});
+			});
+		$(".prev,.next").hover(function(){ 
+				$scroller.vTicker('pause', true);
+			}, function(){
+				$scroller.vTicker('pause', false);
+		});
+		$(".prev").click(function(event){ 
+				event.preventDefault();
+				var checked = $("#animation").is(':checked');
+				$scroller.vTicker('prev', {animate:checked});
+			});
+	}
 	
-	$(".next").click(function(event){ 
-			event.preventDefault();
-			var checked = $("#animation").is(':checked');
-			$scroller.vTicker('next', {animate:checked});
-		});
-	$(".prev,.next").hover(function(){ 
-			$scroller.vTicker('pause', true);
-		}, function(){
-			$scroller.vTicker('pause', false);
-	});
-	$(".prev").click(function(event){ 
-			event.preventDefault();
-			var checked = $("#animation").is(':checked');
-			$scroller.vTicker('prev', {animate:checked});
-		});
+	initTicker('#scroller1', {height: 20});
+	initTicker('#scroller2', {});
+	initTicker('#scroller3', {showItems:2});
+	
 });
 </script>
 </head>
 <body>
 <h1>VTicker Test</h1>
 <input id="animation" type="checkbox"></input>Use Animation
-<div id="scroller" style="border:1px solid silver">
-<ul id="list">
+
+<!-- first scroller -->
+<div id="scroller1" style="border:1px solid silver">
+<ul id="list1">
 <li>Test 1</li>
 <li>Test 2</li>
 <li>Test 3</li>
 </ul>
 </div>
+
+<!-- second scroller -->
+<div id="scroller2" style="border:1px solid red">
+<ul id="list2">
+<li>Test A</li>
+<li>Test B</li>
+<li>Test C</li>
+</ul>
+</div>
+
+<!-- third scroller -->
+<div id="scroller3" style="border:1px solid green">
+<ul id="list3">
+<li>Test AA</li>
+<li>Test BB</li>
+<li>Test CC</li>
+</ul>
+</div>
+
 <a class="Prev" href="#">Prev</a>
 <a class="Next" href="#">Next</a>
 </body>
