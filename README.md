@@ -27,7 +27,9 @@ Please consider supporting the original author who has a Donate button on their 
 ### Starting ticker
 	
     var $scroller = $("#scroller");
-    $scroller.vTicker('init', {height: 20, showItems: 1});
+    $scroller.vTicker('init', {height: 20}); // fixed element height
+    $scroller.vTicker('init', {showItems: 3}); // fixed number of items, automatically calculate item height
+    $scroller.vTicker('init', {}); // show one item, automatically calculate item height
 	
 ### Pausing
     
