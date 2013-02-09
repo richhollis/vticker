@@ -1,0 +1,23 @@
+# minifiy using google closure
+java -jar ../closure/compiler.jar --js=downloads/jquery.vticker.js --js_output_file=downloads/jquery.vticker.min.js
+
+# extract out the version from original source
+jsver=$(sed -n '2{p;q}' downloads/jquery.vticker.js)
+echo $jsver
+jsver=${jsver:23}
+echo $jsver
+
+# prepend the version information into the new minified file
+sed -i "1i /*! vTicker $jsver http://richhollis.github.com/vticker/ | http://richhollis.github.com/vticker/license/ | based on Jubgits vTicker http://www.jugbit.com/jquery-vticker-vertical-news-ticker/ */" downloads/jquery.vticker.min.js
+
+# update jekyll site to latest version
+sed -i "s/latest_version: .*/latest_version: $jsver/" _config.yml
+
+# get filesizes
+min_size=$(du -h downloads/jquery.vticker.min.js | cut -f1)
+echo $min_size
+sed -i "s/latest_size: .*/latest_size: $min_size/" _config.yml
+
+full_size=$(du -h downloads/jquery.vticker.js | cut -f1)
+echo $full_size
+sed -i "s/latest_full_size: .*/latest_full_size: $full_size/" _config.yml

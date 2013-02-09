@@ -1,0 +1,224 @@
+---
+layout: default
+title: vTicker
+---
+
+<script>
+$(function() {
+  //vticker
+  $('#example-vticker').vTicker('init', {speed: 400, 
+    pause: 1000,
+    showItems: 2,
+    padding:4});
+
+  // pause
+  $('#example-pause').vTicker({margin:10});
+  $('#pause').click(function() { 
+    $this = $(this);
+    if($this.text() == 'Pause') {
+      $('#example-pause').vTicker('pause', true);
+      $this.text('Unpause');
+    }
+    else {
+      $('#example-pause').vTicker('pause', false);
+      $this.text('Pause');
+    }
+  });
+
+  // next
+  $('#example-next').vTicker({margin:10});
+  $('#next-animate').click(function() { 
+    $('#example-next').vTicker('next', {animate:true});
+  });
+  $('#next').click(function() { 
+    $('#example-next').vTicker('next', {animate:false});
+  });
+
+  // prev
+  $('#example-prev').vTicker({margin:10});
+  $('#prev-animate').click(function() { 
+    $('#example-prev').vTicker('prev', {animate:true});
+  });
+  $('#prev').click(function() { 
+    $('#example-prev').vTicker('prev', {animate:false});
+  });
+
+});
+</script>
+
+<h2 id="strap" class="center">
+A jQuery plug-in that adds scrolling<br/>vertical tickers to your site
+</h2>
+
+<hr />
+
+<h2>Methods</h2>
+
+<h2 class="def">init</h2>
+<h3>Initializes and starts a vTicker for a specified selector/element</h3>
+
+<div class="option">
+  <div class="name">init(JSON object {} options)</div>
+
+  <div class="param">options.speed <span class="default">700</span>
+    <div class="desc">Sets the transition speed when animated</div>
+  </div>
+
+  <div class="param">options.pause <span class="default">4000</span>
+    <div class="desc">Delay before scrolling to next item</div>
+  </div>
+
+  <div class="param">options.showItems <span class="default">1</span>
+    <div class="desc">The number of items to display in the ticker</div>
+    </div>
+
+  <div class="param">options.mousePause <span class="default">true</span>
+    <div class="desc">When mouse is over ticker should it pause the ticker</div>
+    </div>
+
+  <div class="param">options.height <span class="default">0</span>
+    <div class="desc">Use a fixed height for the ticker. Normally the height is automatically calculated based on the value of showItems</div>
+    </div>
+
+  <div class="param">options.animate <span class="default">true</span>
+    <div class="desc">When true the ticker transitions will be animated</div>
+    </div>
+
+  <div class="param">options.margin <span class="default">0</span>
+    <div class="desc">Applies margin to each LI element in the ticker</div>
+    </div>
+
+  <div class="param">options.padding <span class="default">0</span>
+    <div class="desc">Applies padding to each LI element in the ticker</div>
+    </div>
+</div>
+
+<h3>init Example</h3>
+
+{% highlight javascript %}
+
+    $('#example').vTicker('init', {speed: 400, 
+    pause: 1000,
+    showItems: 2,
+    padding:4});
+
+{% endhighlight  %}
+
+<h3>init Result</h3>
+
+<div id="example-vticker" class="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+<hr/>
+
+<h2 class="def">pause</h2>
+<h3>Pause or resume the ticker</h3>
+
+<div class="option">
+  <div class="name">pause(boolean paused)</div>
+
+  <div class="param">paused
+    <div class="desc">When set to true the ticker is paused. When set to false the ticker is resumed.</div>
+  </div>
+</div>
+
+<h3>pause Example</h3>
+
+{% highlight javascript %}
+
+$('#example').vTicker('pause', true);
+$('#example').vTicker('pause', false);
+
+{% endhighlight  %}
+
+<h3>pause Test</h3>
+
+<div class="example">
+  <button id="pause">Pause</button>
+  <div class="example" id="example-pause">
+    <ul>
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+      <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+      <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    </ul>
+  </div>
+</div>
+
+<hr/>
+
+<h2 class="def">next</h2>
+<h3>Advances to the next ticker item</h3>
+
+<div class="option">
+  <div class="name">next(JSON object {} options)</div>
+
+  <div class="param">options.animate (boolean) <span class="default">false</span>
+   <div class="desc">When true, the next item is animated into view. If false, the next item is shown without animation. If this parameter is not specified then no animation is used by default.</div>
+  </div>
+</div>
+
+<h3>next Example</h3>
+
+{% highlight javascript %}
+
+$('#example').vTicker('next', {animate:true});
+$('#example').vTicker('next', {animate:false});
+
+{% endhighlight  %}
+
+<h3>next Test</h3>
+
+<div class="example">
+  <button id="next-animate">Next (animate=true)</button>
+  <button id="next">Next (animate=false)</button>
+  <div class="example" id="example-next">
+    <ul>
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+      <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+      <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    </ul>
+  </div>
+</div>
+
+<hr/>
+
+<h2 class="def">prev</h2>
+<h3>Returns to the previous ticker item</h3>
+
+<div class="option">
+  <div class="name">prev(JSON object {} options)</div>
+
+  <div class="param">options.animate (boolean) <span class="default">false</span>
+    <div class="desc">When true, the previous item is animated back into view. If false, the previous item is shown without animation. If this parameter is not specified then no animation is used by default.</div>
+  </div>
+</div>
+
+<h3>prev Example</h3>
+
+{% highlight javascript %}
+
+$('#example').vTicker('prev', {animate:true});
+$('#example').vTicker('prev', {animate:false});
+
+{% endhighlight  %}
+
+<h3>prev Test</h3>
+
+<div class="example">
+  <button id="prev-animate">Prev (animate=true)</button>
+  <button id="prev">Prev (animate=false)</button>
+  <div class="example" id="example-prev">
+    <ul>
+      <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+      <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+      <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    </ul>
+  </div>
+</div>
+
+

@@ -1,0 +1,75 @@
+---
+layout: default
+title: vTicker
+---
+
+<script>
+  $(function() {
+    $('#strap').vTicker('init', {mousePause:false});
+    $('#example').vTicker('init', {padding:4});
+  });
+</script>
+
+<h2 id="strap" class="center">
+  <ul>
+    <li>A jQuery plug-in that adds scrolling<br/>vertical tickers to your site</li>
+    <li>Just one line of javascript code is<br/>all you need to start a vTicker</li>
+    <li>Items can be paused when the<br/>mouse hovers over an item</li>
+    <li>Step backwards and forwards through your<br/>ticker items with easy client methods</li>
+  </ul>
+</h2>
+
+<hr />
+
+<h3 class="blue left">Easy to use: <span class="normal">vTicker is easily added to your existing web page by including jQuery, the vTicker plug-in javascript file and then by simply calling the vTicker plug-in with the selector(s) you wish to create a vTicker with:</span>
+</h3>
+
+<hr/>
+
+<h2>Example</h2>
+
+<h3>HTML</h3>
+
+{% highlight html %}
+
+<div id="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+{% endhighlight %}
+
+<h3>Javascript</h3>
+
+{% highlight javascript %}
+
+$(function() {
+  $('#example').vTicker();
+});
+
+{% endhighlight %}
+
+<h3>Result</h3>
+
+<div id="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+
+<hr />
+
+<div class="pad">
+<a class="download" href="/downloads/jquery.vticker.min.js?v={{site.latest_version}}">Download vTicker v{{site.latest_version}} ({{site.latest_size}})</a>
+</div>
+<div class="pad" style="margin-top:10px">
+<b>Also available:</b> <a href="/downloads/jquery.vticker.js?v={{site.latest_version}}">Un-minified version of vTicker v{{site.latest_version}} ({{site.latest_full_size}})</a>
+</div>
+
+
