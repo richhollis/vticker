@@ -31,7 +31,8 @@ h2.def { color: #f3b46e; }
 #strap ul { width: 100%; }
 #example, .example { text-align: left; background-color: #345c6d; border-radius: 5px;}
 .example button { margin: 10px; }
-.example.paused { background-color: red; ;}
+.example.paused,
+#example.paused { background-color: #378c54 ;}
 
 #nav li { display: inline;
 	font-family: "futura-pt",sans-serif;
