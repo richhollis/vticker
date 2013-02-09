@@ -7,5 +7,4 @@ latest_version: 1.11
 latest_size: 4.0K
 latest_full_size: 8.0K
 
-baseurl:  /vticker/gh-pages/
-url: http://richhollis.github.com
+site_url: http://richhollis.github.com/vticker/

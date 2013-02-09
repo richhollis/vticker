@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" id="vticker" class="no-js">
-    
-<head>
-<base href="{{ site.baseurl }}" />
+<head>  
 <meta charset="utf-8">
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ site.strap }}">
 <meta name="author" content="Rich Hollis, Jess Eddy">
-<link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="Shortcut Icon" href="{{ site.site_url }}favicon.ico" type="image/x-icon" />
 <script type="text/javascript" src="//use.typekit.net/fgp8fas.js?b=1"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-<link rel="stylesheet" href="/css/vticker.css?v={{site.latest_version}}" type="text/css"
+<link rel="stylesheet" href="{{ site.site_url }}css/vticker.css?v={{site.latest_version}}" type="text/css"
 media="screen">
-<script src="/js/jquery-1.7.2.min.js"></script>
-<script src="/downloads/jquery.vticker.js?v={{site.latest_version}}"></script>
+<script src="{{ site.site_url }}js/jquery-1.7.2.min.js"></script>
+<script src="{{ site.site_url }}downloads/jquery.vticker.js?v={{site.latest_version}}"></script>
 </script>
 <script type="text/javascript">
 
@@ -56,7 +54,7 @@ media="screen">
            <p class="footer">Based on the original vTicker project by <a href="http://www.jugbit.com/jquery-vticker-vertical-news-ticker/">JugBit</a>
        </p>
        <p class="footer">vTicker is available under the
-           <a href="/license/">MIT & BSD licenses</a>
+           <a href="{{ site.site_url }}license/">MIT & BSD licenses</a>
       </p>
    </div>
    <!-- container -->
