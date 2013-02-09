@@ -16,6 +16,7 @@ body {
 	color: #fff;
 	line-height: 120%;
 	width: 100%;
+	text-shadow: 4px 4px #345c6d;
 }
 
 h2 {
@@ -32,8 +33,9 @@ h2.def { color: #f3b46e; }
 #example, .example { text-align: left; background-color: #345c6d; border-radius: 5px;}
 .example button { margin: 10px; }
 .example.paused,
-#example.paused { background-color: #378c54 ;}
+#example.paused { background-color: #e6b73e; color: #2C7391; }
 
+#nav { margin-left: -34px; overflow: hidden;}
 #nav li { display: inline;
 	font-family: "futura-pt",sans-serif;
 	font-style: normal;
@@ -113,7 +115,7 @@ hr {
 }
 
 .download {
-	background: #ad804e;
+	background: #378c54;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
@@ -124,7 +126,8 @@ hr {
 	color: #fff;
 }
 .download:hover {
-	background: #60a8c8;
+	background: #0f6c34;
+	color: #eee;
 }
 
 ::selection {
