@@ -1,5 +1,5 @@
 /*
-  Vertical News Ticker 1.1
+  Vertical News Ticker 1.11
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
@@ -90,6 +90,26 @@
       var options = state.options;
       if(state.isPaused) return;
       methods.next.call( this, {animate:options.animate} );
+    },
+
+    startInterval: function() {
+      var state = $(this).data('state');
+      var options = state.options;
+      var initThis = this;
+      state.intervalId = setInterval(function(){ 
+        internal.nextUsePause.call( initThis );
+      }, options.pause);
+    },
+
+    stopInterval: function() {
+      var state = $(this).data('state');
+      if(state.intervalId) clearInterval(state.intervalId);
+      state.interval = 0;
+    },
+
+    restartInterval: function() {
+      internal.stopInterval.call(this);
+      internal.startInterval.call(this);
     }
 
   };
@@ -139,17 +159,18 @@
       }
 
       var initThis = this;
-      
-      var interval = setInterval(function(){ 
-        internal.nextUsePause.call( initThis );
-      }, options.pause);
+      internal.startInterval.call( initThis );
 
       if(options.mousePause)
       {
         el.bind("mouseenter",function(){
+          // stop interval
+          internal.stopInterval.call( initThis );
           methods.pause.call( initThis, true );
         }).bind("mouseleave",function(){
           methods.pause.call( initThis, false );
+          // restart interval
+          internal.startInterval.call( initThis );
         });
       }
     },
@@ -164,12 +185,14 @@
     next: function(attribs) { 
       var state = $(this).data('state');
       if(state.animating) return false;
+      internal.restartInterval.call( this );
       internal.moveUp(state, attribs); 
     },
 
     prev: function(attribs) {
       var state = $(this).data('state');
       if(state.animating) return false;
+      internal.restartInterval.call( this );
       internal.moveDown(state, attribs); 
     }
   };
