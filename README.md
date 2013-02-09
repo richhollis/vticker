@@ -15,4 +15,4 @@ Please consider supporting the original author who has a Donate button on their 
 
 Please see the demo site for all documentation and demos:
 
-[![vTicker site](https://github.com/richhollis/vticker/blob/master/vticker.png "vTicker site")](http://richhollis.github.com/vticker/)
+[![vTicker site](https://raw.github.com/richhollis/vticker/master/vticker.png "vTicker site")](http://richhollis.github.com/vticker/)
