@@ -6,3 +6,4 @@ strap: vTicker is a jQuery plug-in that adds scrolling vertical tickers to your 
 latest_version: 1.11
 latest_size: 4.0K
 latest_full_size: 8.0K
+baseurl: http://richhollis.github.com/vticker/
