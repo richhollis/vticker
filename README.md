@@ -4,12 +4,13 @@ This project is based on the cool vTicker jQuery plugin implentation by JugBit.
 
 The original project can be found here: http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
 
-This project implements the original code but as a method based implementation. 
+This project uses the original code as a starting point but uses a method based implementation. 
+
 Compared to the original, it does not support fading and the direction option is removed as the animation direction is based on next or previous item: up for next; and down for previous.
 
-There is a simple HTML test page which demonstrates the usage.
-
 Please consider supporting the original author who has a Donate button on their page.
+
+[You should follow me on Twitter @richhollis](https://twitter.com/intent/user?scree_name=richhollis)
 
 ## Using
 
