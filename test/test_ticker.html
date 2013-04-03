@@ -17,6 +17,7 @@ $(function(){
 				event.preventDefault();
 				var checked = $("#animation").is(':checked');
 				$scroller.vTicker('next', {animate:checked});
+				$('#single').vTicker('next', {animate:checked});
 			});
 		$(".prev,.next").hover(function(){ 
 				$scroller.vTicker('pause', true);
@@ -27,6 +28,7 @@ $(function(){
 				event.preventDefault();
 				var checked = $("#animation").is(':checked');
 				$scroller.vTicker('prev', {animate:checked});
+				$('#single').vTicker('prev', {animate:checked});
 			});
 	}
 	
@@ -36,6 +38,7 @@ $(function(){
 	initTicker('#scroller4', {showItems:2, margin: 10});
 	initTicker('#scroller5', {showItems:2, padding: 10});
 	initTicker('#scroller6');
+	$('#single').vTicker();
 	
 });
 </script>
@@ -45,6 +48,12 @@ $(function(){
 <input id="animation" type="checkbox"></input>Use Animation
 
 <div id="scrollers">
+</div>
+
+<div id="single">
+	<ul>
+		<li>Single item test</li>
+	</ul>
 </div>
 
 
