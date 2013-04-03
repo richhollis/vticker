@@ -1,5 +1,5 @@
 /*
-  Vertical News Ticker 1.11
+  Vertical News Ticker 1.12
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
@@ -88,7 +88,7 @@
     nextUsePause: function() {
       var state = $(this).data('state');
       var options = state.options;
-      if(state.isPaused) return;
+      if(state.isPaused || state.itemCount < 2) return;
       methods.next.call( this, {animate:options.animate} );
     },
 
@@ -121,6 +121,7 @@
       var options = $.extend(defaultsClone, options);
       var el = $(this);
       var state = { 
+        itemCount: el.children('ul').children('li').length,
         itemHeight: 0,
         itemMargin: 0,
         element: el,
@@ -177,6 +178,7 @@
 
     pause: function(pauseState) {
       var state = $(this).data('state');
+      if(state.itemCount < 2) return false;
       state.isPaused = pauseState;
       if(pauseState) $(this).addClass('paused');
       else $(this).removeClass('paused');
@@ -184,14 +186,14 @@
 
     next: function(attribs) { 
       var state = $(this).data('state');
-      if(state.animating) return false;
+      if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveUp(state, attribs); 
     },
 
     prev: function(attribs) {
       var state = $(this).data('state');
-      if(state.animating) return false;
+      if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveDown(state, attribs); 
     }
