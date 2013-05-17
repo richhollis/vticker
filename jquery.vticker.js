@@ -127,7 +127,8 @@
         element: el,
         animating: false,
         options: options,
-        isPaused: (options.startPaused) ? true : false
+        isPaused: (options.startPaused) ? true : false,
+        pausedByCode: false
       };
       $(this).data('state', state);
 
@@ -168,12 +169,16 @@
           //if the automatic scroll is paused, don't change that.
           if (state.isPaused == true) return; 
 
+          state.pausedByCode = true; 
+
             // stop interval
           internal.stopInterval.call( initThis );
           methods.pause.call( initThis, true );
         }).bind("mouseleave", function () {
           //if the automatic scroll is paused, don't change that.
-          if (state.isPaused == true) return;
+          if (state.isPaused == true && !state.pausedByCode) return;
+            
+          state.pausedByCode = false; 
 
           methods.pause.call(initThis, false);
           // restart interval
