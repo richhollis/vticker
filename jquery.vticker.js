@@ -168,10 +168,10 @@
         el.bind("mouseenter", function () {
           //if the automatic scroll is paused, don't change that.
           if (state.isPaused == true) return; 
-
+          
           state.pausedByCode = true; 
 
-            // stop interval
+          // stop interval
           internal.stopInterval.call( initThis );
           methods.pause.call( initThis, true );
         }).bind("mouseleave", function () {
@@ -179,13 +179,47 @@
           if (state.isPaused == true && !state.pausedByCode) return;
             
           state.pausedByCode = false; 
-
+          
           methods.pause.call(initThis, false);
           // restart interval
           internal.startInterval.call( initThis );
         });
       }
     },
+
+    refresh: function(){
+        var state = $(this).data('state');
+        var options = state.options;
+        var el = $(this);
+        state.itemCount = el.children('ul').children('li').length;
+
+        el.css({ overflow: 'hidden', position: 'relative' })
+        .children('ul').css({ position: 'absolute', margin: 0, padding: 0 })
+        .children('li').css({ margin: options.margin, padding: options.padding });
+
+        if (isNaN(options.height) || options.height == 0) {
+            el.children('ul').children('li').each(function () {
+                var current = $(this);
+                if (current.height() > state.itemHeight)
+                    state.itemHeight = current.height();
+            });
+
+            // set the same height on all child elements
+            el.children('ul').children('li').each(function () {
+                var current = $(this);
+                current.height(state.itemHeight);
+            });
+
+            // set element to total height
+            var box = (options.margin) + (options.padding * 2);
+            el.height(((state.itemHeight + box) * options.showItems) + options.margin);
+        }
+        else {
+            // set the preferred height
+            el.height(options.height);
+        }
+
+    }, 
 
     pause: function(pauseState) {
       var state = $(this).data('state');
