@@ -1,5 +1,5 @@
 /*
-  Vertical News Ticker 1.12
+  Vertical News Ticker 1.13
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
