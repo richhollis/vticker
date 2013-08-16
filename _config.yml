@@ -3,7 +3,7 @@ safe:      true
 
 # custom config
 strap: vTicker is a jQuery plug-in that adds scrolling vertical tickers to your site
-latest_version: 1.12
+latest_version: 1.13
 latest_size: 4.0K
 latest_full_size: 8.0K
 

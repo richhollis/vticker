@@ -1,5 +1,5 @@
 /*
-  Vertical News Ticker 1.12
+  Vertical News Ticker 1.13
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
@@ -17,72 +17,47 @@
     height: 0,
     animate: true,
     margin: 0,
-    padding: 0
+    padding: 0,
+    startPaused: false
   };
 
   var internal = { 
 
     moveUp: function(state, attribs) {    
+      internal.animate(state, attribs, 'up');
+    },
+
+    moveDown: function(state, attribs){
+      internal.animate(state, attribs, 'down');
+    },
+
+    animate: function(state, attribs, dir) {
       var height = state.itemHeight;
       var options = state.options;
       var el = state.element;
       var obj = el.children('ul');
-      
-      var clone = obj.children('li:first').clone(true);
+      var selector = (dir === 'up') ? 'li:first' : 'li:last';
+      var clone = obj.children(selector).clone(true);
 
-      if(options.height > 0)
-      {
-        height = obj.children('li:first').height();
-      }
+      if(options.height > 0) height = obj.children('li:first').height();
+      height += (options.margin) + (options.padding*2); // adjust for margins & padding
 
-      // adjust for margins & padding
-      height += (options.margin) + (options.padding*2);
+      if(dir==='down') obj.css('top', '-' + height + 'px').prepend(clone);
 
       if(attribs && attribs.animate) {
+        if(state.animating) return;
         state.animating = true;
-        obj.animate({top: '-=' + height + 'px'}, options.speed, function() {
-            $(obj).children('li:first').remove();
+        var opts = (dir === 'up') ? {top: '-=' + height + 'px'} : {top: 0};
+        obj.animate(opts, options.speed, function() {
+            $(obj).children(selector).remove();
             $(obj).css('top', '0px');
             state.animating = false;
           });
       } else {
-        obj.children('li:first').remove();
+        obj.children(selector).remove();
         obj.css('top', '0px');
       }
-
-      clone.appendTo(obj);
-    },
-
-    moveDown: function(state, attribs){
-      var height = state.itemHeight;
-      var options = state.options;
-      var el = state.element;
-      var obj = el.children('ul');
-      
-      var clone = obj.children('li:last').clone(true);
-      
-      if(options.height > 0)
-      {
-        height = obj.children('li:first').height()
-      }
-
-      // adjust for margins & padding
-      height += (options.margin) + (options.padding*2);
-      
-      obj.css('top', '-' + height + 'px')
-        .prepend(clone);
-      
-      if(attribs && attribs.animate) {
-        if(state.animating) return;
-        state.animating = true;
-        obj.animate({top: 0}, options.speed, function() {
-          $(obj).children('li:last').remove();
-          state.animating = false;
-        });
-      } else {
-        obj.children('li:last').remove();
-        obj.css('top', '0px');
-      }
+      if(dir==='up') clone.appendTo(obj);
     },
 
     nextUsePause: function() {
@@ -103,8 +78,9 @@
 
     stopInterval: function() {
       var state = $(this).data('state');
+      if(!state) return;
       if(state.intervalId) clearInterval(state.intervalId);
-      state.interval = 0;
+      state.intervalId = undefined;
     },
 
     restartInterval: function() {
@@ -117,6 +93,9 @@
   var methods = {
 
     init: function(options) {
+      // if init called second time then stop first, then re-init
+      methods.stop.call(this);
+      // init
       var defaultsClone = jQuery.extend({}, defaults);
       var options = $.extend(defaultsClone, options);
       var el = $(this);
@@ -127,7 +106,8 @@
         element: el,
         animating: false,
         options: options,
-        isPaused: false
+        isPaused: (options.startPaused) ? true : false,
+        pausedByCode: false
       };
       $(this).data('state', state);
 
@@ -135,20 +115,18 @@
         .children('ul').css({position: 'absolute', margin: 0, padding: 0})
         .children('li').css({margin: options.margin, padding: options.padding});
 
-      if(isNaN(options.height) || options.height == 0)
+      if(isNaN(options.height) || options.height === 0)
       {
         el.children('ul').children('li').each(function(){
           var current = $(this);
           if(current.height() > state.itemHeight)
             state.itemHeight = current.height();
         });
-
         // set the same height on all child elements
         el.children('ul').children('li').each(function(){
           var current = $(this);
           current.height(state.itemHeight);
         });
-
         // set element to total height
         var box = (options.margin) + (options.padding * 2);
         el.height(((state.itemHeight + box) * options.showItems) + options.margin);
@@ -160,16 +138,24 @@
       }
 
       var initThis = this;
-      internal.startInterval.call( initThis );
+      if(!options.startPaused) {
+        internal.startInterval.call( initThis );
+      }
 
       if(options.mousePause)
       {
-        el.bind("mouseenter",function(){
+        el.bind("mouseenter", function () {
+          //if the automatic scroll is paused, don't change that.
+          if (state.isPaused === true) return; 
+          state.pausedByCode = true; 
           // stop interval
           internal.stopInterval.call( initThis );
           methods.pause.call( initThis, true );
-        }).bind("mouseleave",function(){
-          methods.pause.call( initThis, false );
+        }).bind("mouseleave", function () {
+          //if the automatic scroll is paused, don't change that.
+          if (state.isPaused === true && !state.pausedByCode) return;
+          state.pausedByCode = false; 
+          methods.pause.call(initThis, false);
           // restart interval
           internal.startInterval.call( initThis );
         });
@@ -178,6 +164,7 @@
 
     pause: function(pauseState) {
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.itemCount < 2) return false;
       state.isPaused = pauseState;
       if(pauseState) $(this).addClass('paused');
@@ -186,6 +173,7 @@
 
     next: function(attribs) { 
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveUp(state, attribs); 
@@ -193,9 +181,16 @@
 
     prev: function(attribs) {
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveDown(state, attribs); 
+    },
+
+    stop: function() {
+      var state = $(this).data('state');
+      if(!state) return undefined;
+      internal.stopInterval.call( this );
     }
   };
  
