@@ -1,39 +1,38 @@
 body {
-	background: #2C7391;
-	font-family: "adelle",serif;
-	font-style: normal;
-	font-weight: 400;
-	margin-top: 25px;
-	color: #fff;
+  background: #2C7391;
+  font-family: "adelle",serif;
+  font-style: normal;
+  font-weight: 400;
+  margin-top: 25px;
+  color: #fff;
 }
 
 #header * {
-	font-family: "futura-pt",sans-serif;
-	font-style: italic;
-	font-weight: 700;
-	font-size: 72px;
-	margin-top: 50px;
-	color: #fff;
-	line-height: 120%;
-	width: 100%;
-	text-shadow: 4px 4px #345c6d;
+  font-family: "futura-pt",sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 72px;
+  margin-top: 50px;
+  color: #fff;
+  line-height: 120%;
+  width: 100%;
+  text-shadow: 4px 4px #345c6d;
 }
 
 h2 {
-	font-style: normal;
-	font-weight: 400;
-	font-size: 32px;
-	margin: 10px;
-	line-height: 120%;
-	color: #7bb1c8;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  margin: 10px;
+  line-height: 120%;
+  color: #7bb1c8;
 }
 h2.def { color: #f3b46e; }
 
 h3 { line-height: 160%; }
 
-ul
-{
-    list-style-type: none;
+li {
+  list-style-type: none;
 }
 
 #strap ul { width: 100%; }
@@ -44,97 +43,97 @@ ul
 
 #nav { margin-left: -34px; overflow: hidden;}
 #nav li { display: inline;
-	font-family: "futura-pt",sans-serif;
-	font-style: normal;
-	font-weight: 700;
+  font-family: "futura-pt",sans-serif;
+  font-style: normal;
+  font-weight: 700;
 }
 
 #nav a { background: #497C91;
-	padding: 4px;
-	border-radius: 5px;
-	text-decoration: none; 
-	color: #fff;
+  padding: 4px;
+  border-radius: 5px;
+  text-decoration: none; 
+  color: #fff;
 }
 #nav a:hover { background: #345c6d; }
 
 .normal {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 .option, pre {
-	display: block;
-	background: #345c6d;
-	width: 730px;
-	padding: 10px;
-	color: #e6973e;
-	text-align: left;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	margin: 0px;
-	overflow: hidden;
-	line-height:160%;
+  display: block;
+  background: #345c6d;
+  width: 730px;
+  padding: 10px;
+  color: #e6973e;
+  text-align: left;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  margin: 0px;
+  overflow: hidden;
+  line-height:160%;
 }
 .option .param { margin: 10px 0 0 20px; }
 
 .container {
-	width: 750px;
-	margin: 0px auto;
-	text-align: center;
+  width: 750px;
+  margin: 0px auto;
+  text-align: center;
 }
 
 .footer {
-	font-size: 15px;
+  font-size: 15px;
 }
 
 .blue { 
-	color: #f3c591;
+  color: #f3c591;
 }
 
 a { color: #f3b46e; text-decoration: none;}
 a:hover { color: #0e465e; }
 
 .blue A { 
-	color: #0b4d8c;
+  color: #0b4d8c;
 }
 .blue A:hover { 
-	color: #337ABF;
+  color: #337ABF;
 }
 
 .left {
-	text-align: left;
+  text-align: left;
 }
 
 p {
-	font-size: 20px;
+  font-size: 20px;
 }
-	
+  
 hr {
-	margin: 20px 0px 20px 0px;
-	height: 2px;
-	background-color: #345c6d;
-	/*background-image: url('/images/separator.png');*/
-	border: 0;
+  margin: 20px 0px 20px 0px;
+  height: 2px;
+  background-color: #345c6d;
+  /*background-image: url('/images/separator.png');*/
+  border: 0;
 }
 
 .pad {
-	padding: 5px 0px 5px 0px;	
+  padding: 5px 0px 5px 0px; 
 }
 
 .download {
-	background: #378c54;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	padding: 20px 60px 20px 60px;
-	font-weight: 700;
-	display: inline-block;
-	text-decoration: none;
-	color: #fff;
+  background: #378c54;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  padding: 20px 60px 20px 60px;
+  font-weight: 700;
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
 }
 .download:hover {
-	background: #0f6c34;
-	color: #eee;
+  background: #0f6c34;
+  color: #eee;
 }
 
 ::selection {
@@ -145,38 +144,38 @@ hr {
 }
 
 .option {
-	text-align: left;
-	margin-bottom: 20px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .option .name {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 6px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .option .param {
-	color: #fff;
+  color: #fff;
 }
 
 .option .desc {
-	color: #e6973e;
+  color: #e6973e;
 }
 
 .option .default {
-	font-style: italic;
-	color: #ad804e;
+  font-style: italic;
+  color: #ad804e;
 }
 
 .option .default:before {
-	content: "(Default: ";
-	color: #ad804e;
+  content: "(Default: ";
+  color: #ad804e;
 }
 .option .default:after {
-	content: ")";
-	color: #ad804e;
+  content: ")";
+  color: #ad804e;
 }
 
 .option .desc:before {
-	content: "Description: ";
+  content: "Description: ";
 }
