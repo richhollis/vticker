@@ -17,7 +17,8 @@
     height: 0,
     animate: true,
     margin: 0,
-    padding: 0
+    padding: 0,
+    startPaused: false
   };
 
   var internal = { 
@@ -39,6 +40,7 @@
       height += (options.margin) + (options.padding*2);
 
       if(attribs && attribs.animate) {
+        if(state.animating) return;
         state.animating = true;
         obj.animate({top: '-=' + height + 'px'}, options.speed, function() {
             $(obj).children('li:first').remove();
@@ -103,8 +105,9 @@
 
     stopInterval: function() {
       var state = $(this).data('state');
+      if(!state) return;
       if(state.intervalId) clearInterval(state.intervalId);
-      state.interval = 0;
+      state.intervalId = undefined;
     },
 
     restartInterval: function() {
@@ -117,6 +120,9 @@
   var methods = {
 
     init: function(options) {
+      // if init called second time then stop first, then re-init
+      methods.stop.call(this);
+      // init
       var defaultsClone = jQuery.extend({}, defaults);
       var options = $.extend(defaultsClone, options);
       var el = $(this);
@@ -143,13 +149,11 @@
           if(current.height() > state.itemHeight)
             state.itemHeight = current.height();
         });
-
         // set the same height on all child elements
         el.children('ul').children('li').each(function(){
           var current = $(this);
           current.height(state.itemHeight);
         });
-
         // set element to total height
         var box = (options.margin) + (options.padding * 2);
         el.height(((state.itemHeight + box) * options.showItems) + options.margin);
@@ -161,25 +165,23 @@
       }
 
       var initThis = this;
-      internal.startInterval.call( initThis );
+      if(!options.startPaused) {
+        internal.startInterval.call( initThis );
+      }
 
       if(options.mousePause)
       {
         el.bind("mouseenter", function () {
           //if the automatic scroll is paused, don't change that.
           if (state.isPaused == true) return; 
-          
           state.pausedByCode = true; 
-
           // stop interval
           internal.stopInterval.call( initThis );
           methods.pause.call( initThis, true );
         }).bind("mouseleave", function () {
           //if the automatic scroll is paused, don't change that.
           if (state.isPaused == true && !state.pausedByCode) return;
-            
           state.pausedByCode = false; 
-          
           methods.pause.call(initThis, false);
           // restart interval
           internal.startInterval.call( initThis );
@@ -189,6 +191,7 @@
 
     pause: function(pauseState) {
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.itemCount < 2) return false;
       state.isPaused = pauseState;
       if(pauseState) $(this).addClass('paused');
@@ -197,6 +200,7 @@
 
     next: function(attribs) { 
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveUp(state, attribs); 
@@ -204,9 +208,16 @@
 
     prev: function(attribs) {
       var state = $(this).data('state');
+      if(!state) return undefined;
       if(state.animating || state.itemCount < 2) return false;
       internal.restartInterval.call( this );
       internal.moveDown(state, attribs); 
+    },
+
+    stop: function() {
+      var state = $(this).data('state');
+      if(!state) return undefined;
+      internal.stopInterval.call( this );
     }
   };
  
