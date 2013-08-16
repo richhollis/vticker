@@ -31,6 +31,11 @@ h2.def { color: #f3b46e; }
 
 h3 { line-height: 160%; }
 
+ul
+{
+    list-style-type: none;
+}
+
 #strap ul { width: 100%; }
 #example, .example { text-align: left; background-color: #345c6d; border-radius: 5px;}
 .example button { margin: 10px; }
