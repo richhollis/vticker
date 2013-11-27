@@ -47,3 +47,7 @@ function prev() {
 function next() {
   el().vTicker('next');
 }
+
+function remove() {
+  el().vTicker('remove');
+}

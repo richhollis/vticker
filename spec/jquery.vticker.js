@@ -122,4 +122,16 @@ describe("jquery.vticker", function() {
     });
   });
 
+  it("can be removed", function() {
+    init({pause:500});
+    $('#second').vTicker('init', {pause:1000});
+    clock.tick(500);
+    expect(val()).toEqual("Item 2");
+    remove();
+    clock.tick(500);
+    expect(document.getElementById("first")).toBeNull(); // removed
+    expect(document.getElementById("second")).toBeDefined(); // not removed
+    expect(second().text()).toEqual("Item B"); // second continues to tick
+  });
+
 });

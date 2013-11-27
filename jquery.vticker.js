@@ -1,5 +1,5 @@
 /*
-  Vertical News Ticker 1.13
+  Vertical News Ticker 1.14
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
@@ -87,7 +87,6 @@
       internal.stopInterval.call(this);
       internal.startInterval.call(this);
     }
-
   };
 
   var methods = {
@@ -191,6 +190,15 @@
       var state = $(this).data('state');
       if(!state) return undefined;
       internal.stopInterval.call( this );
+    },
+
+    remove: function() {
+      var state = $(this).data('state');
+      if(!state) return undefined;
+      internal.stopInterval.call( this );
+      var el = state.element;
+      el.unbind();
+      el.remove();
     }
   };
  
