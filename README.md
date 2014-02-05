@@ -1,8 +1,8 @@
 # VTicker
 
-This project is based on the cool vTicker jQuery plugin implentation by JugBit.
+This project is a fork of original vTicker jQuery plugin implentation by JugBit (MIT Licensed):
 
-The original project can be found here: http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
+http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
 
 This project uses the original code as a starting point but uses a method based implementation. 
 
