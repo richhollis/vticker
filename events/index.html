@@ -1,0 +1,224 @@
+---
+layout: default
+title: Events - vTicker jQuery Plugin
+---
+
+<script>
+$(function() {
+  //before-tick
+  function setInitialOpacities() {
+    var ul = jQuery('#before-tick ul');
+    ul.children('li:nth-child(1)').css("opacity", .15);
+    ul.children('li:nth-child(2)').css("opacity", .15);
+    ul.children('li:nth-child(3)').css("opacity", .23);
+    ul.children('li:nth-child(4)').css("opacity", 1);
+    ul.children('li:nth-child(5)').css("opacity", .23);
+    ul.children('li:nth-child(6)').css("opacity", .15);
+    ul.children('li:nth-child(7)').css("opacity", .15);       
+  }
+  $('#before-tick').vTicker({showItems: 7, interval: 1000, padding:4});
+  setInitialOpacities();
+  $('#before-tick').on('vticker.beforeTick', function() {
+      var ul = jQuery('#before-tick ul');
+      var interval = 500;
+      ul.children('li:nth-child(1)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(2)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(3)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(4)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(5)').animate({opacity: 1}, interval);
+      ul.children('li:nth-child(6)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(7)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(8)').css("opacity", .15);       
+  });
+
+  // after-tick
+  $('#after-tick').vTicker({showItems: 7, interval: 1000, padding:4});
+  $('#after-tick').on('vticker.afterTick', function() {
+      var colours = ["white", "orange", "cyan", "magenta", "silver", "purple"];
+      var randomColour = colours[Math.floor(Math.random() * 5)];
+      $('#after-tick ul li').css("color", randomColour);
+  });
+
+  // pause-tick
+  var pauseTimerId = undefined;
+  $("#pause-tick").vTicker({padding:4});
+  $("#pause-tick").on('vticker.pause', function() {
+    if(pauseTimerId) {
+      clearTimeout(pauseTimerId);
+      pauseTimerId = undefined;
+    }
+    $("#pause-info").text("I've have paused, I'm taking a little rest");
+  });
+  $("#pause-tick").on('vticker.resume', function() {
+    $("#pause-info").text("I've resumed");
+    pauseTimerId = setTimeout(function() { 
+      $("#pause-info").text("Hover on the ticker above for this example to see my status change");
+    }, 1000);
+  });
+
+  // // pause
+  // $('#example-pause').vTicker({margin:10});
+  // $('#pause').click(function() { 
+  //   $this = $(this);
+  //   if($this.text() == 'Pause') {
+  //     $('#example-pause').vTicker('pause', true);
+  //     $this.text('Unpause');
+  //   }
+  //   else {
+  //     $('#example-pause').vTicker('pause', false);
+  //     $this.text('Pause');
+  //   }
+  // });
+
+  // // next
+  // $('#example-next').vTicker({margin:10});
+  // $('#next-animate').click(function() { 
+  //   $('#example-next').vTicker('next', {animate:true});
+  // });
+  // $('#next').click(function() { 
+  //   $('#example-next').vTicker('next', {animate:false});
+  // });
+
+  // // prev
+  // $('#example-prev').vTicker({margin:10});
+  // $('#prev-animate').click(function() { 
+  //   $('#example-prev').vTicker('prev', {animate:true});
+  // });
+  // $('#prev').click(function() { 
+  //   $('#example-prev').vTicker('prev', {animate:false});
+  // });
+
+});
+</script>
+
+<h2 id="strap" class="center">
+A jQuery plug-in that adds scrolling<br/>vertical tickers to your site
+</h2>
+
+<hr />
+
+<h2>Events</h2>
+
+<h2 class="def">vticker.beforeTick</h2>
+<h3>Sent before the ticker changes the current item</h3>
+
+<h3>beforeTick Example</h3>
+
+{% highlight javascript %}
+
+  function setInitialOpacities() {
+    var ul = jQuery('#before-tick ul');
+    ul.children('li:nth-child(1)').css("opacity", .15);
+    ul.children('li:nth-child(2)').css("opacity", .15);
+    ul.children('li:nth-child(3)').css("opacity", .23);
+    ul.children('li:nth-child(4)').css("opacity", 1);
+    ul.children('li:nth-child(5)').css("opacity", .23);
+    ul.children('li:nth-child(6)').css("opacity", .15);
+    ul.children('li:nth-child(7)').css("opacity", .15);       
+  }
+  $('#before-tick').vTicker({showItems: 7, padding: 4});
+  setInitialOpacities();
+  $('#before-tick').on('vticker.beforeTick', function() {
+      var ul = jQuery('#before-tick ul');
+      var interval = 500;
+      ul.children('li:nth-child(1)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(2)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(3)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(4)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(5)').animate({opacity: 1}, interval);
+      ul.children('li:nth-child(6)').animate({opacity: .23}, interval);
+      ul.children('li:nth-child(7)').animate({opacity: .15}, interval);
+      ul.children('li:nth-child(8)').css("opacity", .15);       
+  });
+
+{% endhighlight  %}
+
+<h3>beforeTick Result</h3>
+
+<div id="before-tick" class="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+<hr/>
+
+<h2 class="def">vticker.afterTick</h2>
+<h3>Sent after the ticker has changed to the next item.</h3>
+
+<h3>afterTick Example</h3>
+
+{% highlight javascript %}
+
+  $('#after-tick').vTicker({showItems: 7, interval: 1000, padding: 4});
+  $('#after-tick').on('vticker.afterTick', function() {
+      var colours = ["white", "orange", "cyan", "magenta", "silver", "purple"];
+      var randomColour = colours[Math.floor(Math.random() * 5)];
+      $('#after-tick ul li').css("color", randomColour);
+  });
+
+{% endhighlight  %}
+
+<h3>afterTick Result</h3>
+
+<div id="after-tick" class="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+<hr/>
+
+<h2 class="def">vticker.pause / vticker.resume</h2>
+<h3>Sent when vticker pauses or resumes</h3>
+
+<h3>Example</h3>
+
+{% highlight javascript %}
+
+  var pauseTimerId = undefined;
+  $("#pause-tick").vTicker({padding: 4});
+  $("#pause-tick").on('vticker.pause', function() {
+    if(pauseTimerId) {
+      clearTimeout(pauseTimerId);
+      pauseTimerId = undefined;
+    }
+    $("#pause-info").text("I've have paused, I'm taking a little rest");
+  });
+  $("#pause-tick").on('vticker.resume', function() {
+    $("#pause-info").text("I've resumed");
+    pauseTimerId = setTimeout(function() { 
+      $("#pause-info").text("Hover on the ticker above for this example to see my status change");
+    }, 1000);
+  });
+
+{% endhighlight  %}
+
+<h3>Result</h3>
+
+<div id="pause-tick" class="example">
+  <ul>
+    <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</li>
+    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</li>
+    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</li>
+  </ul>
+</div>
+
+<h3>Status</h3>
+
+<div id="pause-info" class="example" style="margin-top:10px;padding:4px;">
+  Hover on the ticker above for this example to see my status change
+</div>
+

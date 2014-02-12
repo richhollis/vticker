@@ -1,10 +1,10 @@
 /*
-  Vertical News Ticker 1.14
+  Vertical News Ticker 1.15
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
 
-  Modified by: Richard Hollis @richhollis - richhollis.co.uk
+  Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
 */
 
 (function($){
@@ -37,6 +37,9 @@
       var el = state.element;
       var obj = el.children('ul');
       var selector = (dir === 'up') ? 'li:first' : 'li:last';
+
+      el.trigger("vticker.beforeTick");
+      
       var clone = obj.children(selector).clone(true);
 
       if(options.height > 0) height = obj.children('li:first').height();
@@ -52,10 +55,12 @@
             $(obj).children(selector).remove();
             $(obj).css('top', '0px');
             state.animating = false;
+            el.trigger("vticker.afterTick");
           });
       } else {
         obj.children(selector).remove();
         obj.css('top', '0px');
+        el.trigger("vticker.afterTick");
       }
       if(dir==='up') clone.appendTo(obj);
     },
@@ -166,8 +171,15 @@
       if(!state) return undefined;
       if(state.itemCount < 2) return false;
       state.isPaused = pauseState;
-      if(pauseState) $(this).addClass('paused');
-      else $(this).removeClass('paused');
+      var el = state.element;
+      if(pauseState) {
+        $(this).addClass('paused');
+        el.trigger("vticker.pause");
+      }
+      else {
+        $(this).removeClass('paused');
+        el.trigger("vticker.resume");
+      }
     },
 
     next: function(attribs) { 
