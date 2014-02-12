@@ -104,6 +104,45 @@ describe("jquery.vticker", function() {
     expect(val()).toEqual("Item 2");
   });
 
+  it("fires beforeTick and afterTick events in correct order when animating", function() {
+    var i = 0;
+    var beforeTick = 0;
+    var afterTick = 0;
+    $('#first').vTicker('init', {pause:500});
+    $('#first').on('vticker.beforeTick', function() { 
+      beforeTick = ++i;
+    });
+    $('#first').on('vticker.afterTick', function() { 
+      afterTick = ++i;
+    });
+    clock.tick(499);
+    expect(beforeTick).toBeFalsy();
+    expect(afterTick).toBeFalsy();
+    clock.tick(1);
+    expect(beforeTick).toEqual(1);
+    expect(afterTick).toEqual(2);
+  });
+
+  it("sends pause event when paused", function() {
+    var paused = false;
+    $('#first').on('vticker.pause', function() { paused = true; });
+    init();
+    expect(paused).toBeFalsy();
+    pause();
+    expect(paused).toBeTruthy();
+  });
+
+  it("sends resume event when un-paused", function() {
+    var resume = false;
+    $('#first').on('vticker.resume', function() { resume = true; });
+    init();
+    expect(resume).toBeFalsy();
+    pause();
+    expect(resume).toBeFalsy();
+    unpause();
+    expect(resume).toBeTruthy();
+  });
+
   describe("when not initialized", function() {
     it("#stop should return undefined", function() {
       expect(stopTicker()).toBeUndefined();
@@ -133,5 +172,4 @@ describe("jquery.vticker", function() {
     expect(document.getElementById("second")).toBeDefined(); // not removed
     expect(second().text()).toEqual("Item B"); // second continues to tick
   });
-
 });
