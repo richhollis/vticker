@@ -18,7 +18,7 @@ $ ->
     margin: 0
     padding: 0
     startPaused: false
-    alwaysAppendItems: true
+    autoAppend: true
 
   internal = 
     moveUp: (state, attribs) -> internal.showNextItem(state, attribs, 'up')
@@ -49,7 +49,7 @@ $ ->
         internal.animateNextItem(nis, state) unless state.animating
       else
         internal.nonAnimatedNextItem(nis)
-      clone.appendTo(nis.obj) if nis.dir == 'up' && state.options.alwaysAppendItems
+      clone.appendTo(nis.obj) if nis.dir == 'up' && state.options.autoAppend
       nis.el.trigger 'vticker.afterTick'
 
     animateNextItem: (nis, state) ->

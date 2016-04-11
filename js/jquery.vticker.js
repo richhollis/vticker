@@ -19,7 +19,7 @@ $(function() {
     margin: 0,
     padding: 0,
     startPaused: false,
-    alwaysAppendItems: true
+    autoAppend: true
   };
   internal = {
     moveUp: function(state, attribs) {
@@ -60,7 +60,7 @@ $(function() {
       } else {
         internal.nonAnimatedNextItem(nis);
       }
-      if (nis.dir === 'up' && state.options.alwaysAppendItems) {
+      if (nis.dir === 'up' && state.options.autoAppend) {
         clone.appendTo(nis.obj);
       }
       return nis.el.trigger('vticker.afterTick');
