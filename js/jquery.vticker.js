@@ -3,7 +3,7 @@
   Vertical News Ticker 1.2
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
-               http://www.jugbit.com/jquery-vticker-vertical-news-ticker/
+               https://github.com/kasp3r/vTicker
 
   Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
  */
