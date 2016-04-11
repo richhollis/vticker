@@ -2,7 +2,7 @@
 java -jar ~/compiler.jar --js=downloads/jquery.vticker.js --js_output_file=downloads/jquery.vticker.min.js
 
 # extract out the version from original source
-jsver=$(sed -n '2{p;q}' downloads/jquery.vticker.js)
+jsver=$(sed -n '3{p;q}' downloads/jquery.vticker.js)
 echo $jsver
 jsver=${jsver:23}
 echo $jsver
