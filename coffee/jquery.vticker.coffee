@@ -18,6 +18,7 @@ $ ->
     margin: 0
     padding: 0
     startPaused: false
+    alwaysAppendItems: true
 
   internal = 
     moveUp: (state, attribs) -> internal.showNextItem(state, attribs, 'up')
@@ -43,12 +44,12 @@ $ ->
       nis.el.trigger 'vticker.beforeTick'
       clone = nis.obj.children(nis.selector).clone(true)
       # adjust for margins & padding
-      nis.obj.css('top', '-' + nis.height + 'px').prepend(clone) if nis.dir == 'down'        
+      nis.obj.css('top', '-' + nis.height + 'px').prepend(clone) if nis.dir == 'down' 
       if attribs && attribs.animate
         internal.animateNextItem(nis, state) unless state.animating
       else
         internal.nonAnimatedNextItem(nis)
-      clone.appendTo(nis.obj) if nis.dir == 'up'
+      clone.appendTo(nis.obj) if nis.dir == 'up' && state.options.alwaysAppendItems
       nis.el.trigger 'vticker.afterTick'
 
     animateNextItem: (nis, state) ->
