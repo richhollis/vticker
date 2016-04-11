@@ -20,36 +20,48 @@ $ ->
     startPaused: false
 
   internal = 
-    moveUp: (state, attribs) -> internal.animate state, attribs, 'up'
+    moveUp: (state, attribs) -> internal.showNextItem(state, attribs, 'up')
 
-    moveDown: (state, attribs) -> internal.animate state, attribs, 'down'
+    moveDown: (state, attribs) -> internal.showNextItem(state, attribs, 'down')
 
-    animate: (state, attribs, dir) ->
+    nextItemState: (state, dir) ->
+      obj = state.element.children('ul')
+      # calc height
       height = state.itemHeight
-      options = state.options
-      el = state.element
-      obj = el.children('ul')
-      selector = if dir == 'up' then 'li:first' else 'li:last'
-      el.trigger 'vticker.beforeTick'
-      clone = obj.children(selector).clone(true)
-      height = obj.children('li:first').height() if options.height > 0        
-      height += options.margin + options.padding * 2
+      height = obj.children('li:first').height() if state.options.height > 0        
+      height += state.options.margin + state.options.padding * 2
+      # attributes
+      height: height
+      options: state.options
+      el: state.element
+      obj: obj
+      selector: if dir == 'up' then 'li:first' else 'li:last'
+      dir: dir
+
+    showNextItem: (state, attribs, dir) ->
+      nis = internal.nextItemState(state, dir)
+      nis.el.trigger 'vticker.beforeTick'
+      clone = nis.obj.children(nis.selector).clone(true)
       # adjust for margins & padding
-      obj.css('top', '-' + height + 'px').prepend clone if dir == 'down'        
+      nis.obj.css('top', '-' + nis.height + 'px').prepend(clone) if nis.dir == 'down'        
       if attribs && attribs.animate
-        return if state.animating
-        state.animating = true
-        opts = if dir == 'up' then top: '-=' + height + 'px' else top: 0
-        obj.animate opts, options.speed, ->
-          $(obj).children(selector).remove()
-          $(obj).css 'top', '0px'
-          state.animating = false
-          el.trigger 'vticker.afterTick'
+        internal.animateNextItem(nis, state) unless state.animating
       else
-        obj.children(selector).remove()
-        obj.css 'top', '0px'
-        el.trigger 'vticker.afterTick'
-      clone.appendTo obj if dir == 'up'
+        internal.nonAnimatedNextItem(nis)
+      clone.appendTo(nis.obj) if nis.dir == 'up'
+      nis.el.trigger 'vticker.afterTick'
+
+    animateNextItem: (nis, state) ->
+      state.animating = true
+      opts = if nis.dir == 'up' then top: '-=' + nis.height + 'px' else top: 0
+      nis.obj.animate opts, state.options.speed, ->
+        $(nis.obj).children(nis.selector).remove()
+        $(nis.obj).css 'top', '0px'
+        state.animating = false
+
+    nonAnimatedNextItem: (nis) ->
+      nis.obj.children(nis.selector).remove()
+      nis.obj.css 'top', '0px'          
 
     nextUsePause: ->
       state = $(@).data('state')
@@ -84,14 +96,14 @@ $ ->
     hasSingleItem: (state) -> !internal.hasMultipleItems(state)
 
     bindMousePausing: (el, state) =>
-      el.bind('mouseenter', ->
+      el.bind 'mouseenter', ->
         # if the automatic scroll is paused, don't change that.
         return if state.isPaused
         state.pausedByCode = true
         # stop interval
         internal.stopInterval.call @
         methods.pause.call @, true
-      ).bind 'mouseleave', ->
+      .bind 'mouseleave', ->
         # if the automatic scroll is paused, don't change that.
         return if state.isPaused && !state.pausedByCode
         state.pausedByCode = false

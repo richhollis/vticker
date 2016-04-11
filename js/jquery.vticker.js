@@ -22,51 +22,65 @@ $(function() {
   };
   internal = {
     moveUp: function(state, attribs) {
-      return internal.animate(state, attribs, 'up');
+      return internal.showNextItem(state, attribs, 'up');
     },
     moveDown: function(state, attribs) {
-      return internal.animate(state, attribs, 'down');
+      return internal.showNextItem(state, attribs, 'down');
     },
-    animate: function(state, attribs, dir) {
-      var clone, el, height, obj, options, opts, selector;
+    nextItemState: function(state, dir) {
+      var height, obj;
+      obj = state.element.children('ul');
       height = state.itemHeight;
-      options = state.options;
-      el = state.element;
-      obj = el.children('ul');
-      selector = dir === 'up' ? 'li:first' : 'li:last';
-      el.trigger('vticker.beforeTick');
-      clone = obj.children(selector).clone(true);
-      if (options.height > 0) {
+      if (state.options.height > 0) {
         height = obj.children('li:first').height();
       }
-      height += options.margin + options.padding * 2;
-      if (dir === 'down') {
-        obj.css('top', '-' + height + 'px').prepend(clone);
+      height += state.options.margin + state.options.padding * 2;
+      return {
+        height: height,
+        options: state.options,
+        el: state.element,
+        obj: obj,
+        selector: dir === 'up' ? 'li:first' : 'li:last',
+        dir: dir
+      };
+    },
+    showNextItem: function(state, attribs, dir) {
+      var clone, nis;
+      nis = internal.nextItemState(state, dir);
+      nis.el.trigger('vticker.beforeTick');
+      clone = nis.obj.children(nis.selector).clone(true);
+      if (nis.dir === 'down') {
+        nis.obj.css('top', '-' + nis.height + 'px').prepend(clone);
       }
       if (attribs && attribs.animate) {
-        if (state.animating) {
-          return;
+        if (!state.animating) {
+          internal.animateNextItem(nis, state);
         }
-        state.animating = true;
-        opts = dir === 'up' ? {
-          top: '-=' + height + 'px'
-        } : {
-          top: 0
-        };
-        obj.animate(opts, options.speed, function() {
-          $(obj).children(selector).remove();
-          $(obj).css('top', '0px');
-          state.animating = false;
-          return el.trigger('vticker.afterTick');
-        });
       } else {
-        obj.children(selector).remove();
-        obj.css('top', '0px');
-        el.trigger('vticker.afterTick');
+        internal.nonAnimatedNextItem(nis);
       }
-      if (dir === 'up') {
-        return clone.appendTo(obj);
+      if (nis.dir === 'up') {
+        clone.appendTo(nis.obj);
       }
+      return nis.el.trigger('vticker.afterTick');
+    },
+    animateNextItem: function(nis, state) {
+      var opts;
+      state.animating = true;
+      opts = nis.dir === 'up' ? {
+        top: '-=' + nis.height + 'px'
+      } : {
+        top: 0
+      };
+      return nis.obj.animate(opts, state.options.speed, function() {
+        $(nis.obj).children(nis.selector).remove();
+        $(nis.obj).css('top', '0px');
+        return state.animating = false;
+      });
+    },
+    nonAnimatedNextItem: function(nis) {
+      nis.obj.children(nis.selector).remove();
+      return nis.obj.css('top', '0px');
     },
     nextUsePause: function() {
       var options, state;
