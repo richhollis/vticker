@@ -7,7 +7,7 @@
   Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
 ###
 
-(($) ->
+$ ->
   defaults = 
     speed: 700
     pause: 4000
@@ -54,19 +54,18 @@
     nextUsePause: ->
       state = $(@).data('state')
       options = state.options
-      return if state.isPaused || state.itemCount < 2
+      return if state.isPaused || internal.hasSingleItem(state)
       methods.next.call @, animate: options.animate
 
     startInterval: ->
       state = $(@).data('state')
       options = state.options
-      self = @
-      state.intervalId = setInterval ->
-        internal.nextUsePause.call self
+      state.intervalId = setInterval =>
+        internal.nextUsePause.call @
       , options.pause
 
     stopInterval: ->
-      return if !state = $(@).data('state')       
+      return unless state = $(@).data('state')       
       clearInterval state.intervalId if state.intervalId
       state.intervalId = undefined
 
@@ -74,75 +73,77 @@
       internal.stopInterval.call @
       internal.startInterval.call @
 
-  methods = 
-    init: (options) ->
-      # if init called second time then stop first, then re-init
-      methods.stop.call @
-      # init
-      defaultsClone = jQuery.extend({}, defaults)
-      options = $.extend(defaultsClone, options)
-      el = $(@)
-      
-      state = 
-        itemCount: el.children('ul').children('li').length
-        itemHeight: 0
-        itemMargin: 0
-        element: el
-        animating: false
-        options: options
-        isPaused: if options.startPaused then true else false
-        pausedByCode: false
+    getState: (from, elem) ->      
+      throw new Error("vTicker: No state available from #{from}") unless state = $(elem).data('state')
+      state
 
-      $(@).data 'state', state
+    isAnimatingOrSingleItem: (state) -> state.animating || @hasSingleItem(state)
 
-      el.css(
-        overflow: 'hidden'
-        position: 'relative')
-      .children('ul').css(
-        position: 'absolute'
-        margin: 0
-        padding: 0)
-      .children('li').css
-        margin: options.margin
-        padding: options.padding
+    hasMultipleItems: (state) -> state.itemCount > 1
+
+    hasSingleItem: (state) -> !internal.hasMultipleItems(state)
+
+    bindMousePausing: (el, state) =>
+      el.bind('mouseenter', ->
+        # if the automatic scroll is paused, don't change that.
+        return if state.isPaused
+        state.pausedByCode = true
+        # stop interval
+        internal.stopInterval.call @
+        methods.pause.call @, true
+      ).bind 'mouseleave', ->
+        # if the automatic scroll is paused, don't change that.
+        return if state.isPaused && !state.pausedByCode
+        state.pausedByCode = false
+        methods.pause.call @, false
+        # restart interval
+        internal.startInterval.call @
+
+    setItemLayout: (el, state, options) ->
+      el.css(overflow: 'hidden', position: 'relative')
+      .children('ul').css(position: 'absolute', margin: 0, padding: 0)
+      .children('li').css(margin: options.margin, padding: options.padding)
 
       if isNaN(options.height) || options.height == 0
-        el.children('ul').children('li').each ->
-          current = $(@)
-          if current.height() > state.itemHeight
-            state.itemHeight = current.height()
+        el.children('ul').children('li').each -> state.itemHeight = $(@).height() if $(@).height() > state.itemHeight
         # set the same height on all child elements
-        el.children('ul').children('li').each ->
-          current = $(@)
-          current.height state.itemHeight
+        el.children('ul').children('li').each -> $(@).height(state.itemHeight)
         # set element to total height
         box = options.margin + options.padding * 2
         el.height (state.itemHeight + box) * options.showItems + options.margin
-      else
-        # set the preferred height
-        el.height options.height
-      self = @
-      internal.startInterval.call self if !options.startPaused
-      if options.mousePause
-        el.bind('mouseenter', ->
-          #if the automatic scroll is paused, don't change that.
-          return if state.isPaused == true
-          state.pausedByCode = true
-          # stop interval
-          internal.stopInterval.call self
-          methods.pause.call self, true
-        ).bind 'mouseleave', ->
-          #if the automatic scroll is paused, don't change that.
-          return if state.isPaused == true && !state.pausedByCode
-          state.pausedByCode = false
-          methods.pause.call self, false
-          # restart interval
-          internal.startInterval.call self
+      else        
+        el.height options.height # set the preferred height
+
+    defaultStateAttribs: (el, options) ->
+      itemCount: el.children('ul').children('li').length
+      itemHeight: 0
+      itemMargin: 0
+      element: el
+      animating: false
+      options: options
+      isPaused: options.startPaused
+      pausedByCode: false
+
+  methods = 
+    init: (options) ->     
+      methods.stop.call @ if state = $(@).data('state') # if init called second time then stop first, then re-init
+      state = null
+
+      clonedDefaults = jQuery.extend({}, defaults)
+      options = $.extend(clonedDefaults, options)
+      
+      el = $(@)
+      
+      state = internal.defaultStateAttribs(el, options)
+      $(@).data('state', state)
+
+      internal.setItemLayout(el, state, options)
+      internal.startInterval.call @ unless options.startPaused
+      internal.bindMousePausing(el, state) if options.mousePause
 
     pause: (pauseState) ->
-      state = $(@).data('state')
-      return undefined unless state
-      return false if state.itemCount < 2
+      state = internal.getState('pause', @)
+      return false unless internal.hasMultipleItems(state)
       state.isPaused = pauseState
       el = state.element
       if pauseState
@@ -153,37 +154,29 @@
         el.trigger 'vticker.resume'
 
     next: (attribs) ->
-      state = $(@).data('state')
-      return undefined unless state
-      return false if state.animating || state.itemCount < 2
+      state = internal.getState('next', @)
+      return false if internal.isAnimatingOrSingleItem(state)
       internal.restartInterval.call @
       internal.moveUp state, attribs
 
     prev: (attribs) ->
-      state = $(@).data('state')
-      return undefined unless state
-      return false if state.animating || state.itemCount < 2       
+      state = internal.getState('prev', @)
+      return false if internal.isAnimatingOrSingleItem(state)
       internal.restartInterval.call @
       internal.moveDown state, attribs
 
     stop: ->
-      state = $(@).data('state')
-      return undefined unless state
+      state = internal.getState('stop', @)
       internal.stopInterval.call @
 
     remove: ->
-      state = $(@).data('state')
-      return undefined unless state
+      state = internal.getState('remove', @)
       internal.stopInterval.call @
       el = state.element
       el.unbind()
       el.remove()
 
   $.fn.vTicker = (method) ->
-    if methods[method]
-      return methods[method].apply(@, Array::slice.call(arguments, 1))
-    else if typeof method == 'object' || !method
-      return methods.init.apply(@, arguments)
-    else
-      $.error 'Method ' + method + ' does not exist on jQuery.vTicker'
-) jQuery
+    return methods[method].apply(@, Array::slice.call(arguments, 1)) if methods[method]
+    return methods.init.apply(@, arguments) if typeof method == 'object' || !method
+    $.error 'Method ' + method + ' does not exist on jQuery.vTicker'

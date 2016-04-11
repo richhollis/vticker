@@ -4,6 +4,9 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="../js/jquery.vticker.js"></script>
+<style>
+	.paused { background-color: red; }
+</style>
 <script>
 $(function(){
 
@@ -46,7 +49,10 @@ $(function(){
 </head>
 <body>
 <h1>VTicker Test</h1>
-<input id="animation" type="checkbox"></input>Use Animation
+<input id="animation" type="checkbox"></input><label for="animation">Use Animation</label>
+<a class="prev" href="#">Prev</a>
+<a class="next" href="#">Next</a>
+
 
 <div id="scrollers">
 </div>
@@ -57,8 +63,5 @@ $(function(){
 	</ul>
 </div>
 
-
-<a class="prev" href="#">Prev</a>
-<a class="next" href="#">Next</a>
 </body>
 </html>

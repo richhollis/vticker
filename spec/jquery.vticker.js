@@ -145,19 +145,19 @@ describe("jquery.vticker", function() {
 
   describe("when not initialized", function() {
     it("#stop should return undefined", function() {
-      expect(stopTicker()).toBeUndefined();
+      expect(function() { stopTicker() } ).toThrow();
     });
     it("#pause(true) should return undefined", function() {
-      expect(pause()).toBeUndefined();
+      expect(function() { pause() }).toThrow();
     });
     it("#pause(false) should return undefined", function() {
-      expect(unpause()).toBeUndefined();
+      expect(function() { unpause() }).toThrow();
     });
     it("#prev should return undefined", function() {
-      expect(prev()).toBeUndefined();
+      expect(function() { prev() }).toThrow();
     });
     it("#next should return undefined", function() {
-      expect(next()).toBeUndefined();
+      expect(function() { next() }).toThrow();
     });
   });
 

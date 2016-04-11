@@ -7,7 +7,7 @@
 
   Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
  */
-(function($) {
+$(function() {
   var defaults, internal, methods;
   defaults = {
     speed: 700,
@@ -72,7 +72,7 @@
       var options, state;
       state = $(this).data('state');
       options = state.options;
-      if (state.isPaused || state.itemCount < 2) {
+      if (state.isPaused || internal.hasSingleItem(state)) {
         return;
       }
       return methods.next.call(this, {
@@ -80,13 +80,14 @@
       });
     },
     startInterval: function() {
-      var options, self, state;
+      var options, state;
       state = $(this).data('state');
       options = state.options;
-      self = this;
-      return state.intervalId = setInterval(function() {
-        return internal.nextUsePause.call(self);
-      }, options.pause);
+      return state.intervalId = setInterval((function(_this) {
+        return function() {
+          return internal.nextUsePause.call(_this);
+        };
+      })(this), options.pause);
     },
     stopInterval: function() {
       var state;
@@ -101,26 +102,44 @@
     restartInterval: function() {
       internal.stopInterval.call(this);
       return internal.startInterval.call(this);
-    }
-  };
-  methods = {
-    init: function(options) {
-      var box, defaultsClone, el, self, state;
-      methods.stop.call(this);
-      defaultsClone = jQuery.extend({}, defaults);
-      options = $.extend(defaultsClone, options);
-      el = $(this);
-      state = {
-        itemCount: el.children('ul').children('li').length,
-        itemHeight: 0,
-        itemMargin: 0,
-        element: el,
-        animating: false,
-        options: options,
-        isPaused: options.startPaused ? true : false,
-        pausedByCode: false
+    },
+    getState: function(from, elem) {
+      var state;
+      if (!(state = $(elem).data('state'))) {
+        throw new Error("vTicker: No state available from " + from);
+      }
+      return state;
+    },
+    isAnimatingOrSingleItem: function(state) {
+      return state.animating || this.hasSingleItem(state);
+    },
+    hasMultipleItems: function(state) {
+      return state.itemCount > 1;
+    },
+    hasSingleItem: function(state) {
+      return !internal.hasMultipleItems(state);
+    },
+    bindMousePausing: (function(_this) {
+      return function(el, state) {
+        return el.bind('mouseenter', function() {
+          if (state.isPaused) {
+            return;
+          }
+          state.pausedByCode = true;
+          internal.stopInterval.call(this);
+          return methods.pause.call(this, true);
+        }).bind('mouseleave', function() {
+          if (state.isPaused && !state.pausedByCode) {
+            return;
+          }
+          state.pausedByCode = false;
+          methods.pause.call(this, false);
+          return internal.startInterval.call(this);
+        });
       };
-      $(this).data('state', state);
+    })(this),
+    setItemLayout: function(el, state, options) {
+      var box;
       el.css({
         overflow: 'hidden',
         position: 'relative'
@@ -134,51 +153,56 @@
       });
       if (isNaN(options.height) || options.height === 0) {
         el.children('ul').children('li').each(function() {
-          var current;
-          current = $(this);
-          if (current.height() > state.itemHeight) {
-            return state.itemHeight = current.height();
+          if ($(this).height() > state.itemHeight) {
+            return state.itemHeight = $(this).height();
           }
         });
         el.children('ul').children('li').each(function() {
-          var current;
-          current = $(this);
-          return current.height(state.itemHeight);
+          return $(this).height(state.itemHeight);
         });
         box = options.margin + options.padding * 2;
-        el.height((state.itemHeight + box) * options.showItems + options.margin);
+        return el.height((state.itemHeight + box) * options.showItems + options.margin);
       } else {
-        el.height(options.height);
+        return el.height(options.height);
       }
-      self = this;
+    },
+    defaultStateAttribs: function(el, options) {
+      return {
+        itemCount: el.children('ul').children('li').length,
+        itemHeight: 0,
+        itemMargin: 0,
+        element: el,
+        animating: false,
+        options: options,
+        isPaused: options.startPaused,
+        pausedByCode: false
+      };
+    }
+  };
+  methods = {
+    init: function(options) {
+      var clonedDefaults, el, state;
+      if (state = $(this).data('state')) {
+        methods.stop.call(this);
+      }
+      state = null;
+      clonedDefaults = jQuery.extend({}, defaults);
+      options = $.extend(clonedDefaults, options);
+      el = $(this);
+      state = internal.defaultStateAttribs(el, options);
+      $(this).data('state', state);
+      internal.setItemLayout(el, state, options);
       if (!options.startPaused) {
-        internal.startInterval.call(self);
+        internal.startInterval.call(this);
       }
       if (options.mousePause) {
-        return el.bind('mouseenter', function() {
-          if (state.isPaused === true) {
-            return;
-          }
-          state.pausedByCode = true;
-          internal.stopInterval.call(self);
-          return methods.pause.call(self, true);
-        }).bind('mouseleave', function() {
-          if (state.isPaused === true && !state.pausedByCode) {
-            return;
-          }
-          state.pausedByCode = false;
-          methods.pause.call(self, false);
-          return internal.startInterval.call(self);
-        });
+        return internal.bindMousePausing(el, state);
       }
     },
     pause: function(pauseState) {
       var el, state;
-      state = $(this).data('state');
-      if (!state) {
-        return void 0;
-      }
-      if (state.itemCount < 2) {
+      state = internal.getState('pause', this);
+      if (!internal.hasMultipleItems(state)) {
         return false;
       }
       state.isPaused = pauseState;
@@ -193,11 +217,8 @@
     },
     next: function(attribs) {
       var state;
-      state = $(this).data('state');
-      if (!state) {
-        return void 0;
-      }
-      if (state.animating || state.itemCount < 2) {
+      state = internal.getState('next', this);
+      if (internal.isAnimatingOrSingleItem(state)) {
         return false;
       }
       internal.restartInterval.call(this);
@@ -205,11 +226,8 @@
     },
     prev: function(attribs) {
       var state;
-      state = $(this).data('state');
-      if (!state) {
-        return void 0;
-      }
-      if (state.animating || state.itemCount < 2) {
+      state = internal.getState('prev', this);
+      if (internal.isAnimatingOrSingleItem(state)) {
         return false;
       }
       internal.restartInterval.call(this);
@@ -217,18 +235,12 @@
     },
     stop: function() {
       var state;
-      state = $(this).data('state');
-      if (!state) {
-        return void 0;
-      }
+      state = internal.getState('stop', this);
       return internal.stopInterval.call(this);
     },
     remove: function() {
       var el, state;
-      state = $(this).data('state');
-      if (!state) {
-        return void 0;
-      }
+      state = internal.getState('remove', this);
       internal.stopInterval.call(this);
       el = state.element;
       el.unbind();
@@ -238,10 +250,10 @@
   return $.fn.vTicker = function(method) {
     if (methods[method]) {
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-    } else if (typeof method === 'object' || !method) {
-      return methods.init.apply(this, arguments);
-    } else {
-      return $.error('Method ' + method + ' does not exist on jQuery.vTicker');
     }
+    if (typeof method === 'object' || !method) {
+      return methods.init.apply(this, arguments);
+    }
+    return $.error('Method ' + method + ' does not exist on jQuery.vTicker');
   };
-})(jQuery);
+});
