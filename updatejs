@@ -3,7 +3,7 @@
 # bash helper script to pull latest version of source jquery plugin
 
 # get the latest version of from master
-wget --output-document downloads/jquery.vticker.js https://raw.github.com/richhollis/vticker/master/jquery.vticker.js
+wget --output-document downloads/jquery.vticker.js https://raw.github.com/richhollis/vticker/master/js/jquery.vticker.js
 
 # minify, update version numbers
 ./postupdate
