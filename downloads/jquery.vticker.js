@@ -1,13 +1,13 @@
 
 /*
-  Vertical News Ticker 1.2
+  Vertical News Ticker 1.21
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                https://github.com/kasp3r/vTicker
 
   Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
  */
-$(function() {
+(function($) {
   var defaults, internal, methods;
   defaults = {
     speed: 700,
@@ -271,4 +271,4 @@ $(function() {
     }
     return $.error('Method ' + method + ' does not exist on jQuery.vTicker');
   };
-});
+})(jQuery);
