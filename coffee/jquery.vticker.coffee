@@ -1,5 +1,5 @@
 ###
-  Vertical News Ticker 1.2
+  Vertical News Ticker 1.21
 
   Original by: Tadas Juozapaitis ( kasp3rito [eta] gmail (dot) com )
                https://github.com/kasp3r/vTicker
@@ -7,7 +7,8 @@
   Forked/Modified by: Richard Hollis @richhollis - richhollis.co.uk
 ###
 
-$ ->
+(($) ->
+
   defaults = 
     speed: 700
     pause: 4000
@@ -193,3 +194,5 @@ $ ->
     return methods[method].apply(@, Array::slice.call(arguments, 1)) if methods[method]
     return methods.init.apply(@, arguments) if typeof method == 'object' || !method
     $.error 'Method ' + method + ' does not exist on jQuery.vTicker'
+    
+) jQuery    
